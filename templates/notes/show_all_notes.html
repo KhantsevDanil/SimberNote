@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Note{% endblock %}
+{% block content %}
+{% load thumbnail %}
+
+        <h1>Last Note</h1>
+        {% for note in note_list %}
+            <h2><a class="p-2 text-dark" href="{% url 'note:show_one_note' note.author.username note.id %}">{{ note.title }}    {{note.tags}}</a></h2>
+
+        <p align="left">{{ note.date_create }}</p>
+        {% endfor %}
+  {% include "paginator.html" %}
+{% endblock %}

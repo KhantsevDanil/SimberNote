@@ -33,10 +33,11 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'users',
-    'posts',
-    'about',
+    'notes',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sorl.thumbnail',
+    'django_filters',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -140,7 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'posts/static/static/')
+    os.path.join(BASE_DIR, 'notes/static/static/')
 ]
 
 STATIC_URL = '/static/'
@@ -152,8 +157,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Login
 
 LOGIN_URL = "/auth/login/"
-LOGIN_REDIRECT_URL = "posts:index"
-LOGOUT_REDIRECT_URL = "posts:index"
 
 #  подключаем движок filebased.EmailBackend
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
@@ -163,11 +166,21 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 POSTS_PER_PAGE = 10
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'yatube.paginator.CorePagination',
+    'PAGE_SIZE': 6,
 }
+DJOSER = {
+    "HIDE_USERS": False,
+    "PERMISSIONS": {
+        'user': ['rest_framework.permissions.AllowAny'],
+        'user_list': ['rest_framework.permissions.AllowAny'],
+    },
+}
+
+LOGIN_REDIRECT_URL='note:index'

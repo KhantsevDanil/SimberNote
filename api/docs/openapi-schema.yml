@@ -1,0 +1,609 @@
+openapi: 3.0.2
+info:
+  title: 'SimberNote'
+  version: ''
+paths:
+  /api/users/:
+    get:
+      operationId: Список пользователей
+      description: ''
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: Номер страницы.
+          schema:
+            type: integer
+        - name: limit
+          required: false
+          in: query
+          description: Количество объектов на странице.
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                    description: 'Общее количество объектов в базе'
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://foodgram.example.org/api/users/?page=4
+                    description: 'Ссылка на следующую страницу'
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://foodgram.example.org/api/users/?page=2
+                    description: 'Ссылка на предыдущую страницу'
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                    description: 'Список объектов текущей страницы'
+          description: ''
+      tags:
+        - Пользователи
+    post:
+      operationId: Регистрация пользователя
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomUserCreate'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUserResponseOnCreate'
+          description: 'Пользователь успешно создан'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+      tags:
+        - Пользователи
+  /api/tags/:
+    get:
+      operationId: Cписок тегов
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+          description: ''
+      tags:
+      - Теги
+  /api/tags/{id}/:
+    get:
+      operationId: Получение тега
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Уникальный идентификатор этого Тега."
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: ''
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - Теги
+    put:
+      operationId: Обновление тега
+      security:
+        - Token: [ ]
+      description: 'Доступно только администратору'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Уникальный идентификатор этого тега."
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+          description: 'Тег  успешно обновлен'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - Теги
+    delete:
+      operationId: Удаление тега
+
+      description: 'Доступно только администратору'
+      security:
+        - Token: [ ]
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Уникальный идентификатор этого тега"
+        schema:
+          type: string
+      responses:
+        '204':
+          description: 'Тег успешно удален'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - Теги
+  /api/notes/:
+    get:
+      operationId: Cписок заметки
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Note'
+          description: ''
+      tags:
+      - Заметки
+  /api/notes/{id}/:
+    get:
+      operationId: Получение заметки
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Уникальный идентификатор этой заметки."
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - Заметки
+    put:
+      operationId: Обновление заметки
+      security:
+        - Token: [ ]
+      description: 'Доступно только администратору'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Уникальный идентификатор этой заметки."
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: 'Заметка  успешно обновлена'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - Заметки
+    delete:
+      operationId: Удаление заметки
+
+      description: 'Доступно только администратору'
+      security:
+        - Token: [ ]
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: "Уникальный идентификатор этой заметки"
+        schema:
+          type: string
+      responses:
+        '204':
+          description: 'Заметка успешно удалена'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/PermissionDenied'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - Заметки
+  /api/notes/download_all_notes/:
+    get:
+      security:
+        - Token: [ ]
+      operationId: Скачать список покупок
+      description: 'Скачать файл со списком заметок ".pdf". Доступно только авторизованным пользователям.'
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            text/plain:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+      tags:
+      - Заметки
+  /api/users/{id}/:
+    get:
+      operationId: Профиль пользователя
+      description: 'Доступно только авторизованным пользователям.'
+      security:
+        - Token: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Уникальный id этого пользователя"
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+      tags:
+        - Пользователи
+  /api/users/me/:
+    get:
+      operationId: Текущий пользователь
+      description: ''
+      parameters: []
+      security:
+        - Token: [ ]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+      tags:
+      - Пользователи
+  /api/users/set_password/:
+    post:
+      operationId: Изменение пароля
+      description: 'Изменение пароля текущего пользователя'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPassword'
+      responses:
+        '204':
+          description: 'Пароль успешно изменен'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+      tags:
+      - Пользователи
+components:
+  schemas:
+    User:
+      description:  'Пользователь (В заметке - автор заметки)'
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: "Адрес электронной почты"
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: "Уникальный юзернейм"
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+          description: "Имя"
+          example: "Вася"
+        last_name:
+          type: string
+          maxLength: 150
+          description: "Фамилия"
+          example: "Пупкин"
+        is_subscribed:
+          type: boolean
+          readOnly: true
+          description: "Подписан ли текущий пользователь на этого"
+          example: false
+      required:
+      - username
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+          description: 'Название'
+          example: 'Завтрак'
+        color:
+          type: string
+          nullable: true
+          maxLength: 7
+          description: 'Цвет в HEX'
+          example: '#E26C2D'
+        slug:
+          type: string
+          nullable: true
+          maxLength: 200
+          pattern: ^[-a-zA-Z0-9_]+$
+          description: 'Уникальный слаг'
+          example: 'breakfast'
+      required:
+      - name
+    Note:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tags:
+          description: 'Список тегов'
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        author:
+          description: 'автор заметки'
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        title:
+          type: string
+          maxLength: 15
+          description: 'what is the note about'
+          example: 'Favorite breakfast'
+        color:
+          type: string
+          nullable: true
+          maxLength: 7
+          description: 'Цвет в HEX'
+          example: '#E26C2D'
+        text:
+          type: string
+          nullable: true
+          description: 'Уникальный слаг'
+          example: 'Marin have birthday. Don`t forget about it'
+        image:
+          type: object
+          nullable: true
+          description: 'Картинка'
+        date_create:
+          type: integer
+          nullable: true
+          description: 'дата содания'
+          example: '21.04.2022'
+      required:
+      - name
+    CustomUserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: "Адрес электронной почты"
+          example: "vpupkin@yandex.ru"
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: "Уникальный юзернейм"
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+          example: "vasya.pupkin"
+        first_name:
+          type: string
+          maxLength: 150
+          description: "Имя"
+          example: "Вася"
+        last_name:
+          type: string
+          maxLength: 150
+          description: "Фамилия"
+          example: "Пупкин"
+        password:
+          type: string
+          maxLength: 150
+          description: "Пароль"
+          example: "Qwerty123"
+      required:
+      - username
+      - password
+      - first_name
+      - last_name
+      - email
+    CustomUserResponseOnCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: "Адрес электронной почты"
+          example: "vpupkin@yandex.ru"
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: "Уникальный юзернейм"
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+          example: "vasya.pupkin"
+        first_name:
+          type: string
+          maxLength: 150
+          description: "Имя"
+          example: "Вася"
+        last_name:
+          type: string
+          maxLength: 150
+          description: "Фамилия"
+          example: "Пупкин"
+      required:
+        - username
+        - first_name
+        - last_name
+        - email
+    SetPassword:
+      type: object
+      properties:
+        new_password:
+          type: string
+        current_password:
+          type: string
+      required:
+      - new_password
+      - current_password
+    ValidationError:
+      description: Стандартные ошибки валидации DRF
+      type: object
+      properties:
+        field_name:
+          description: 'Название поля, в котором произошли ошибки. Таких полей может быть несколько'
+          example: [ 'Обязательное поле.' ]
+          type: array
+          items:
+            type: string
+    AuthenticationError:
+      description: Пользователь не авторизован
+      type: object
+      properties:
+        detail:
+          description: 'Описание ошибки'
+          example: "Учетные данные не были предоставлены."
+          type: string
+    PermissionDenied:
+      description: Недостаточно прав
+      type: object
+      properties:
+        detail:
+          description: 'Описание ошибки'
+          example: "У вас недостаточно прав для выполнения данного действия."
+          type: string
+    NotFound:
+      description: Объект не найден
+      type: object
+      properties:
+        detail:
+          description: 'Описание ошибки'
+          example: "Страница не найдена."
+          type: string
+
+  responses:
+    ValidationError:
+      description: 'Ошибки валидации в стандартном формате DRF'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+
+    AuthenticationError:
+      description: Пользователь не авторизован
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthenticationError'
+
+    PermissionDenied:
+      description: Недостаточно прав
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PermissionDenied'
+
+    NotFound:
+      description: Объект не найден
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFound'
+
+
+  securitySchemes:
+    Token:
+      description: 'Авторизация по токену. <br>
+      Все запросы от имени пользователя должны выполняться с заголовком "Authorization: Token TOKENVALUE"'
+      type: http
+      scheme: token
