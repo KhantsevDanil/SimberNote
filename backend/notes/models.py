@@ -1,9 +1,7 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.html import format_html
-
-User = get_user_model()
+from users.models import User
 
 
 class Note(models.Model):
