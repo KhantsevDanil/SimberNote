@@ -1,11 +1,6 @@
 from django.urls import path
-from .views import (
-    note_create,
-    note_edit,
-    show_all_notes,
-    show_one_note,
-    index
-)
+
+from .views import index, note_create, note_edit, show_all_notes, show_one_note
 
 app_name = "note"
 

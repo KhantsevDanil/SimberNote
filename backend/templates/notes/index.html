@@ -2,6 +2,6 @@
 {% block title %}Main Page{% endblock %}
 {% block content %}
         {% if request.user.is_authenticated %}
-                {{ count_notes }}
+                <p>У вас {{ count_notes }} заметок</p>
 {% endif%}
 {% endblock content %}

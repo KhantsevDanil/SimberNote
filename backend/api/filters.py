@@ -1,4 +1,5 @@
 from django_filters.rest_framework import FilterSet, filters
+
 from notes.models import Note, User
 
 

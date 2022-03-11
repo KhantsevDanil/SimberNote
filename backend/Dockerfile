@@ -3,4 +3,4 @@ WORKDIR /code
 COPY requirements.txt .
 RUN pip install -r ./requirements.txt
 COPY . .
-CMD ["gunicorn", "simber_main.wsgi:application", "--bind", "0:8000" ]
+CMD ["gunicorn", "simbir_main.wsgi:application", "--bind", "0:8000" ]

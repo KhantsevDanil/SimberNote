@@ -1,9 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from api.views.tag import TagViewSet
 from api.views.note import NoteViewSet
-
+from api.views.tag import TagViewSet
 
 app_name = "api"
 router = DefaultRouter()

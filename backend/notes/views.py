@@ -6,12 +6,11 @@ from django.urls import reverse
 
 from .forms import NoteForm
 from .models import Note, Tag
-from django.views.generic.base import TemplateView
 
 
 def index(request):
     """Функция возвращает открывшуюся заметку"""
-    if request.user.is_authenticated == True:
+    if request.user.is_authenticated:
         user = request.user
         count_notes = len(Note.objects.filter(author=user))
         return render(request, 'notes/index.html', {'count_notes': count_notes})
@@ -30,9 +29,9 @@ def show_all_notes(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'notes/show_all_notes.html', {'page': page,
-                                                'paginator': paginator,
-                                                'note_list': note_list,
-                                                })
+                                                         'paginator': paginator,
+                                                         'note_list': note_list,
+                                                         })
 
 
 @login_required

@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 
-from notes.models import Tag
 from api.serializers.tag import TagSerializer
-from api.permissions import ReadOnlyOrAdmin
+from notes.models import Tag
+
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()

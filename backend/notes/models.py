@@ -1,21 +1,22 @@
-from django.db import models
 from django.core.validators import RegexValidator
+from django.db import models
 from django.utils.html import format_html
+
 from users.models import User
 
 
 class Note(models.Model):
     title = models.TextField(verbose_name="about",
                              max_length=15,
-                            help_text="what is the note about",)
+                             help_text="what is the note about",)
     tags = models.ManyToManyField("Tag",
                                   related_name="notes",
                                   verbose_name="tags",)
     text = models.TextField(verbose_name="Text",
                             help_text="the main content of the post")
     date_create = models.DateTimeField("Date_create",
-                                    auto_now_add=True,
-                                    help_text="Date note create")
+                                       auto_now_add=True,
+                                       help_text="Date note create")
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE,
                                related_name="notes",

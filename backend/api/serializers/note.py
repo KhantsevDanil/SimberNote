@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from notes.models import Note, User, Tag
+from notes.models import Note, Tag, User
 
 
 class NoteSerializer(serializers.ModelSerializer):

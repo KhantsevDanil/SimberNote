@@ -2,6 +2,7 @@ reportlab
 drf_extra_fields
 django-environ
 psycopg2-binary==2.8
+sorl-thumbnail
 gunicorn==20.0.4
 asgiref==3.2.7
 attrs==19.3.0
@@ -25,6 +26,7 @@ sqlparse==0.3.1
 urllib3==1.25.9
 wcwidth==0.1.9
 zipp==3.1.0
+django-allauth~=0.42.0
 djangorestframework_simplejwt
 django-filter
 djoser

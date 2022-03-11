@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Note, Tag
 
 
@@ -7,6 +8,7 @@ class TagInline(admin.TabularInline):
     extra = 1
     verbose_name = 'Тег'
     verbose_name_plural = 'Теги'
+
 
 class NoteAdmin(admin.ModelAdmin):
     list_display = [

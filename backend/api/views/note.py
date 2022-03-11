@@ -1,11 +1,12 @@
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
 from rest_framework.decorators import action
 
-from ..pdf_format.pdf_generator import notes_list_pdf
+from api.filters import NoteFilter
 from api.permissions import IsOwnerOrAdmin
 from api.serializers.note import NoteSerializer
-from api.filters import NoteFilter
-from notes.models import User, Note, Tag
+from notes.models import Note, Tag, User
+
+from ..pdf_format.pdf_generator import notes_list_pdf
 
 
 class NoteViewSet(viewsets.ModelViewSet):
